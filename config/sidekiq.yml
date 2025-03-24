@@ -1,0 +1,36 @@
+:queues:
+  - default
+  - mailers
+  - urgent
+production:
+  :concurrency: 10
+  :logfile: ./log/sidekiq.log
+  :pidfile: ./tmp/pids/sidekiq.pid
+  :verbose: false
+  :require: ./config/initializers/sidekiq.rb
+  :timeout: 30
+  :poll_interval: 15
+  :average_scheduled_poll_interval: 5
+  :strict_args: true
+  :daemon: true
+  :tag: [ app, sidekiq, production ]
+  :redis:
+    url: <%= ENV.fetch('REDIS_URL') %>
+development:
+  :concurrency: 5
+  :logfile: ./log/sidekiq.log
+  :require: ./config/initializers/sidekiq.rb
+  :verbose: true
+  :strict_args: true
+  :tag: [ app, sidekiq, development ]
+  :redis:
+    url: redis://localhost:6379/1
+test:
+  :concurrency: 1
+  :logfile: ./log/sidekiq.log
+  :require: ./config/initializers/sidekiq.rb
+  :verbose: true
+  :strict_args: true
+  :tag: [ app, sidekiq, test ]
+  :redis:
+    url: redis://localhost:6379/1
