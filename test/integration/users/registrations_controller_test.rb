@@ -1,14 +1,10 @@
 require "test_helper"
 
 class Users::RegistrationsControllerTest < ActionDispatch::IntegrationTest
-  include Devise::Test::IntegrationHelpers
-
   VALID_PASSWORD = "Valid!123"
   INVALID_PASSWORD = "WrongPassword!123"
 
   def setup
-    Rails.application.reload_routes_unless_loaded
-
     @user = create(:user, password: VALID_PASSWORD, password_confirmation: VALID_PASSWORD)
     @other_user = create(:user, password: VALID_PASSWORD, password_confirmation: VALID_PASSWORD)
     sign_in @user

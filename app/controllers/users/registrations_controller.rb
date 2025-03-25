@@ -1,5 +1,5 @@
 class Users::RegistrationsController < Devise::RegistrationsController
-  layout 'form_only'
+  # layout 'form_only'
 
   before_action :authenticate_user!
   before_action :set_user, only: [:update, :edit, :destroy]

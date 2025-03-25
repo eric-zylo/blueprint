@@ -19,4 +19,10 @@ Rails.application.routes.draw do
       root to: "users/sessions#new", as: :unauthenticated_root
     end
   end
+
+  scope '/u' do
+    resources :users, only: [] do
+      resources :patients, only: [:index, :new, :create, :edit, :update, :destroy]
+    end
+  end
 end
