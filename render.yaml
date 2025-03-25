@@ -1,6 +1,6 @@
 databases:
-  - name: backend
-    databaseName: backend
+  - name: backend_production_x1c6
+    databaseName: backend_production_x1c6
     user: eric
     plan: free
 
