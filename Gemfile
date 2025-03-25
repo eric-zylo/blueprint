@@ -25,8 +25,10 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
 gem "solid_cache"
-gem 'sidekiq'
 gem "solid_cable"
+
+gem 'sidekiq'
+gem "redis", "~> 5.0"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -44,6 +46,7 @@ gem 'react-rails'
 gem 'haml-rails'
 gem 'devise'
 gem 'tailwindcss-rails', '~> 4.2'
+gem 'pundit'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -74,5 +77,3 @@ group :test do
   gem 'faker', '~> 2.15'
   gem 'mocha', '~> 2.0'
 end
-
-gem "tailwindcss-ruby", "~> 4.0"
