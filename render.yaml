@@ -1,10 +1,15 @@
 databases:
-  - name: blueprint
+  - name: backend
     databaseName: backend
     user: eric
     plan: free
 
 services:
+  - type: redis
+    name: sidekiq-redis
+    ipAllowList: [] # only allow internal connections
+    plan: free # optional (defaults to starter)
+    maxmemoryPolicy: noeviction
   - type: web
     name: blueprint
     runtime: ruby
