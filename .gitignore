@@ -42,3 +42,4 @@
 .env
 dump.rdb
 vendor/javascript/@rails--ujs.js
+node_modules/
