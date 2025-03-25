@@ -72,3 +72,5 @@ group :test do
   gem 'faker', '~> 2.15'
   gem 'mocha', '~> 2.0'
 end
+
+gem "tailwindcss-ruby", "~> 4.0"
