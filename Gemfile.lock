@@ -119,7 +119,6 @@ GEM
     drb (2.2.1)
     ed25519 (1.3.0)
     erubi (1.13.1)
-    erubis (2.7.0)
     execjs (2.10.0)
     factory_bot (6.5.1)
       activesupport (>= 6.1.0)
@@ -139,11 +138,6 @@ GEM
       activesupport (>= 5.1)
       haml (>= 4.0.6)
       railties (>= 5.1)
-    html2haml (2.3.0)
-      erubis (~> 2.7.0)
-      haml (>= 4.0)
-      nokogiri (>= 1.6.0)
-      ruby_parser (~> 3.5)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.1.0)
@@ -334,9 +328,6 @@ GEM
       rubocop-rails (>= 2.30)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
-    ruby_parser (3.21.1)
-      racc (~> 1.5)
-      sexp_processor (~> 4.16)
     rubyzip (2.4.1)
     securerandom (0.4.1)
     selenium-webdriver (4.30.1)
@@ -345,7 +336,6 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sexp_processor (4.17.3)
     sidekiq (8.0.1)
       connection_pool (>= 2.5.0)
       json (>= 2.9.0)
@@ -371,6 +361,16 @@ GEM
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.1.5)
+    tailwindcss-rails (4.2.1)
+      railties (>= 7.0.0)
+      tailwindcss-ruby (~> 4.0)
+    tailwindcss-ruby (4.0.15)
+    tailwindcss-ruby (4.0.15-aarch64-linux-gnu)
+    tailwindcss-ruby (4.0.15-aarch64-linux-musl)
+    tailwindcss-ruby (4.0.15-arm64-darwin)
+    tailwindcss-ruby (4.0.15-x86_64-darwin)
+    tailwindcss-ruby (4.0.15-x86_64-linux-gnu)
+    tailwindcss-ruby (4.0.15-x86_64-linux-musl)
     temple (0.10.3)
     thor (1.3.2)
     thruster (0.1.12)
@@ -427,7 +427,6 @@ DEPENDENCIES
   factory_bot_rails
   faker (~> 2.15)
   haml-rails
-  html2haml
   importmap-rails
   jbuilder
   kamal
@@ -445,6 +444,8 @@ DEPENDENCIES
   solid_cable
   solid_cache
   stimulus-rails
+  tailwindcss-rails (~> 4.2)
+  tailwindcss-ruby (~> 4.0)
   thruster
   turbo-rails
   tzinfo-data
