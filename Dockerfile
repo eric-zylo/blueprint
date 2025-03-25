@@ -13,12 +13,12 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-# Set environment variables
+# Set environment variables (fix syntax)
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development test" \
-    PORT=10000 # Ensure correct port for Render
+    PORT=10000
 
 # Build dependencies
 FROM base AS build
@@ -39,7 +39,7 @@ COPY . .
 
 # Ensure database configuration is in place (Render provides DATABASE_URL)
 RUN rm -f config/database.yml && \
-    echo "production:\n  url: <%= ENV['DATABASE_URL'] %>" > config/database.yml
+    echo "production:\n  adapter: postgresql\n  url: <%= ENV['DATABASE_URL'] %>" > config/database.yml
 
 # Precompile assets
 RUN SECRET_KEY_BASE=dummy_key bundle exec rails assets:precompile
@@ -60,5 +60,5 @@ USER 1000:1000
 # Expose correct port for Render
 EXPOSE 10000
 
-# Start server
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "10000"]
+# Start server in production mode
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "10000", "-e", "production"]
