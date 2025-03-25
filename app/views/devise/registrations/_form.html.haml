@@ -1,0 +1,14 @@
+%h2.text-2xl.font-semibold.text-center.mb-6= resource.persisted? ? "Edit #{resource_name.to_s.humanize}" : "Sign up"
+
+= render "devise/shared/error_messages", resource: resource
+
+= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-4", "data-turbo": "false" }) do |f|
+  = render "devise/registrations/form_fields/name_fields", f: f
+  = render "devise/registrations/form_fields/email_field", f: f
+  = render "devise/registrations/form_fields/password_fields", f: f
+
+  - if resource.persisted?
+    = render "devise/registrations/form_fields/current_password_field", f: f
+
+  %div
+    = f.submit resource.persisted? ? "Update" : "Sign up", class: "w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
