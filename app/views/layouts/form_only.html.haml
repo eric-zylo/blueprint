@@ -17,20 +17,5 @@
     = stylesheet_link_tag "tailwind", "data-turbo-track": "reload"
 
   %body
-    %header.bg-indigo-600.text-white.p-4
-      .container.mx-auto.flex.items-center.justify-between
-        %h1.text-2xl.font-semibold
-          Blueprint
-        %nav
-          %ul.flex.space-x-4
-            %li
-              = link_to "Change Password", edit_user_registration_path
-            %li
-              = link_to "Sign Out", destroy_user_session_path, method: :delete
-    %main
-      = render "shared/flash_messages"
-      = yield
-
-    %footer.bg-gray-800.text-white.p-4
-      .container.mx-auto.text-center
-        &copy; 2025 Blueprint. All rights reserved.
+    = render "shared/flash_messages"
+    = yield

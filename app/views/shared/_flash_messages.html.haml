@@ -1,0 +1,9 @@
+- flash.each do |type, message|
+  - next if message.blank?
+
+  - bg_class, text_class, border_class, icon_class = flash_styles_for(type)
+
+  %div{ class: "flex items-center #{bg_class} #{text_class} p-4 rounded border #{border_class}" }
+    %span.flex-shrink-0.w-5.h-5
+      %i{ data: { hero: icon_class }, class: "h-5 w-5 mr-2" }
+    %span= message

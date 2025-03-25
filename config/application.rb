@@ -27,5 +27,6 @@ module Blueprint
     config.action_cable.disable_request_forgery_protection = true
     config.action_cable.allowed_request_origins = []
     config.generators.template_engine = :haml
+    config.active_job.queue_adapter = :sidekiq
   end
 end
