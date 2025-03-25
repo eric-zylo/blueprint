@@ -99,7 +99,7 @@ Rails.application.configure do
   }
 
   config.action_mailer.default_url_options = {
-    host: "blueprint-wcws.onrender.com/",
+    host: "screenbetter.online",
     protocol: "https"
   }
 end
