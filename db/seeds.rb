@@ -1,9 +1,30 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+questions_with_domains = [
+  { title: "Little interest or pleasure in doing things?", domain: :depression },
+  { title: "Feeling down, depressed, or hopeless?", domain: :depression },
+  { title: "Sleeping less than usual, but still have a lot of energy?", domain: :mania },
+  { title: "Starting lots more projects than usual or doing more risky things than usual?", domain: :mania },
+  { title: "Feeling nervous, anxious, frightened, worried, or on edge?", domain: :anxiety },
+  { title: "Feeling panic or being frightened?", domain: :anxiety },
+  { title: "Avoiding situations that make you feel anxious?", domain: :anxiety },
+  { title: "Drinking at least 4 drinks of any kind of alcohol in a single day?", domain: :substance_use }
+]
+
+ActiveRecord::Base.transaction do
+  screener = DiagnosticScreener.create!(
+    name: "BPDS",
+    disorder: "Cross-Cutting",
+    display_name: "BDS",
+    full_name: "Blueprint Diagnostic Screener"
+  )
+
+  questions_with_domains.each_with_index do |entry, index|
+    question = Question.create!(title: entry[:title])
+    DomainMapping.create!(question: question, domain: entry[:domain])
+
+    DiagnosticScreenerQuestion.create!(
+      diagnostic_screener: screener,
+      question: question,
+      position: index + 1
+    )
+  end
+end

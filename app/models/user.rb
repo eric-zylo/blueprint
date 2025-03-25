@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  self.primary_key = :id
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :confirmable
@@ -6,6 +8,8 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
   validate :password_complexity
+
+  has_many :patients
 
   private
 
