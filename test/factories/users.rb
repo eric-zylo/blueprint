@@ -5,5 +5,6 @@ FactoryBot.define do
     password_confirmation { "Valid!123" }
     first_name { "John" }
     last_name { "Doe" }
+    confirmed_at { Time.current }
   end
 end

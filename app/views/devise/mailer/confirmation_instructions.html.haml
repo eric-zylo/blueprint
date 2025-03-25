@@ -1,0 +1,13 @@
+%p.text-base.text-gray-700
+  Welcome, #{@resource.first_name}!
+
+%p.text-sm.text-gray-600.mt-4
+  Thanks for signing up for Blueprint.
+  To activate your account, please confirm your email address by clicking the button below.
+
+%p.mt-6
+  %a.inline-block.bg-indigo-600.text-white.font-semibold.py-2.px-4.rounded.hover:bg-indigo-700{ href: confirmation_url(@resource, confirmation_token: @token) }
+    Confirm your account
+
+%p.text-xs.text-gray-500.mt-6
+  If you did not sign up for this account, you can safely ignore this email.
