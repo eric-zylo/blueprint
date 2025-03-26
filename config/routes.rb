@@ -5,9 +5,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :diagnostic_screener_instances, only: [:show] do
+      resources :diagnostic_screener_instances, param: :token, only: [:show] do
         collection do
-          post :score
+          post 'score/:token', to: 'diagnostic_screener_instances#score'
         end
       end
     end

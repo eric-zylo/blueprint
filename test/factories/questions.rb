@@ -1,8 +1,7 @@
 FactoryBot.define do
   factory :question do
     title { Faker::Lorem.question }
-
-    diagnostic_screener_instance
+    questionable { association(:diagnostic_screener_template) }
 
     trait :with_domain_mapping do
       after(:create) do |question|

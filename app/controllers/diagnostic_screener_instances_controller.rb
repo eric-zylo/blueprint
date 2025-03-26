@@ -1,18 +1,19 @@
 class DiagnosticScreenerInstancesController < ApplicationController
+  layout 'react_only'
+
   before_action :authenticate_user!, only: [:create]
   before_action :set_patient, only: [:create]
+  before_action :set_diagnostic_screener_instance, only: [:show]
 
   def show
-    @diagnostic_screener_instance = DiagnosticScreenerInstance.find_by(token: params[:token])
-
-    if @diagnostic_screener_instance.blank?
+    if @screener.blank?
       if user_signed_in?
-        redirect_to authenticated_root_path
+        redirect_to authenticated_root_path, notice: 'Diagnostic Screener not found.'
       else
-        redirect_to unauthenticated_root_path
+        redirect_to unauthenticated_root_path, alert: 'Diagnostic Screener not found.'
       end
     else
-      # Render the screener for the patient to fill out
+      @screener
     end
   end
 
@@ -37,6 +38,10 @@ class DiagnosticScreenerInstancesController < ApplicationController
 
   def set_patient
     @patient = Patient.find(params[:patient_id])
+  end
+
+  def set_diagnostic_screener_instance
+    @screener = DiagnosticScreenerInstance.find_by(token: params[:token])
   end
 
   def diagnostic_screener_instance_params

@@ -9,19 +9,19 @@ questions_with_domains = [
   { title: "Drinking at least 4 drinks of any kind of alcohol in a single day?", domain: :substance_use }
 ]
 
-ActiveRecord::Base.transaction do
-  screener_template = DiagnosticScreenerTemplate.create!(
-    name: "BPDS",
-    disorder: "Cross-Cutting",
-    display_name: "BDS",
-    full_name: "Blueprint Diagnostic Screener"
+screener_template = DiagnosticScreenerTemplate.create!(
+  name: "BPDS",
+  disorder: "Cross-Cutting",
+  display_name: "BDS",
+  full_name: "Blueprint Diagnostic Screener"
+)
+
+questions_with_domains.each_with_index do |entry, index|
+  question = Question.create!(title: entry[:title], questionable: screener_template)
+  DomainMapping.create!(question: question, domain: entry[:domain])
+
+  DiagnosticScreenerTemplateQuestion.create!(
+    diagnostic_screener_template: screener_template,
+    question: question
   )
-
-  questions_with_domains.each_with_index do |entry, index|
-    question = Question.create!(title: entry[:title], questionable: screener_template)
-
-    DomainMapping.create!(question: question, domain: entry[:domain])
-
-    screener_template.questions << question
-  end
 end

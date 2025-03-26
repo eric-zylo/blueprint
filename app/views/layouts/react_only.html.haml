@@ -1,0 +1,13 @@
+%html{lang: "en"}
+  %head
+    %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{charset: "utf-8"}/
+    %meta{content: "IE=edge", "http-equiv" => "X-UA-Compatible"}/
+    %meta{content: "width=device-width, initial-scale=1, shrink-to-fit=no", name: "viewport"}/
+    %title Diagnostic Screener
+    = csrf_meta_tags
+    = csp_meta_tag
+    = javascript_pack_tag 'application'
+  %body
+    #root
+    = yield
