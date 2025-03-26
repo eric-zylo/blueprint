@@ -4,6 +4,7 @@ module.exports = {
     './app/helpers/**/*.rb',
     './app/assets/stylesheets/**/*.scss',
     './app/javascript/**/*.js',
+    './app/assets/stylesheets/application.css',
   ],
   theme: {
     extend: {},

@@ -102,4 +102,8 @@ Rails.application.configure do
     host: "screenbetter.online",
     protocol: "https"
   }
+
+  config.assets.compile = false   # Do not allow dynamic compilation in production
+  config.assets.digest = true    # Enable asset fingerprinting for caching
+  config.assets.js_compressor = :uglifier
 end
