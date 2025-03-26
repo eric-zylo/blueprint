@@ -5,7 +5,7 @@ class DiagnosticScreenerInstancesController < ApplicationController
   def show
     @diagnostic_screener_instance = DiagnosticScreenerInstance.find_by(token: params[:token])
 
-    if @diagnostic_screener_instance.present?
+    if @diagnostic_screener_instance.blank?
       if user_signed_in?
         redirect_to authenticated_root_path
       else
