@@ -25,7 +25,7 @@ FROM base AS build
 
 # Install necessary build tools
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config && \
+    apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config nodejs yarn && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install gems
@@ -36,6 +36,9 @@ RUN bundle install && \
 
 # Copy application code
 COPY . .
+
+# Install node dependencies
+RUN yarn install --check-files
 
 # Ensure database configuration is in place (Render provides DATABASE_URL)
 RUN rm -f config/database.yml && \
