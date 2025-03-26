@@ -37,8 +37,8 @@ RUN bundle install && \
 # Copy application code
 COPY . .
 
-# Install node dependencies
-RUN yarn install
+# Explicitly change to the application directory
+RUN cd /rails && yarn install
 
 # Ensure database configuration is in place (Render provides DATABASE_URL)
 RUN rm -f config/database.yml && \
