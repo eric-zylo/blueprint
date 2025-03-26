@@ -38,7 +38,7 @@ RUN bundle install && \
 COPY . .
 
 # Install node dependencies
-RUN yarn install --check-files
+RUN yarn install
 
 # Ensure database configuration is in place (Render provides DATABASE_URL)
 RUN rm -f config/database.yml && \
