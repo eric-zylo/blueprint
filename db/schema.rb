@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_26_113447) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_26_183630) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
 
   create_table "answers", force: :cascade do |t|
     t.bigint "assessment_id", null: false
-    t.bigint "question_id", null: false
+    t.uuid "question_id", null: false
     t.integer "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -55,7 +55,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_26_113447) do
     t.integer "score", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "answers"
+    t.jsonb "assessments"
     t.index ["diagnostic_screener_instance_id"], name: "idx_on_diagnostic_screener_instance_id_25400fa623"
+  end
+
+  create_table "diagnostic_screener_template_questions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "diagnostic_screener_template_id", null: false
+    t.uuid "question_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["diagnostic_screener_template_id"], name: "idx_on_diagnostic_screener_template_id_90aca81fe8"
+    t.index ["question_id"], name: "index_diagnostic_screener_template_questions_on_question_id"
   end
 
   create_table "diagnostic_screener_templates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -69,7 +80,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_26_113447) do
 
   create_table "domain_mappings", force: :cascade do |t|
     t.integer "domain"
-    t.bigint "question_id", null: false
+    t.uuid "question_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["question_id"], name: "index_domain_mappings_on_question_id"
@@ -85,7 +96,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_26_113447) do
     t.index ["user_id"], name: "index_patients_on_user_id"
   end
 
-  create_table "questions", force: :cascade do |t|
+  create_table "questions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -119,6 +130,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_26_113447) do
   add_foreign_key "diagnostic_screener_instances", "patients"
   add_foreign_key "diagnostic_screener_instances", "users"
   add_foreign_key "diagnostic_screener_results", "diagnostic_screener_instances"
+  add_foreign_key "diagnostic_screener_template_questions", "diagnostic_screener_templates", on_delete: :cascade
+  add_foreign_key "diagnostic_screener_template_questions", "questions"
   add_foreign_key "domain_mappings", "questions"
   add_foreign_key "patients", "users"
 end
