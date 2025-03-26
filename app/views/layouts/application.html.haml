@@ -13,8 +13,8 @@
     %link{rel: "icon", href: "/icon.svg", type: "image/svg+xml"}
     %link{rel: "apple-touch-icon", href: "/icon.png"}
 
-    = javascript_importmap_tags
     = stylesheet_link_tag "tailwind", "data-turbo-track": "reload"
+    = javascript_importmap_tags "application"
 
   %body
     %header.bg-indigo-600.text-white.p-4
@@ -25,15 +25,12 @@
           %ul.flex.space-x-4
             - if current_user
               %li
-                = link_to "View Patients", user_patients_path(current_user)
+                = link_to "Change Password", edit_user_registration_path
               %li
                 = link_to "Sign Out", destroy_user_session_path, method: :delete
-            %li
-              = link_to "Change Password", edit_user_registration_path
-    %main
-      = render "shared/flash_messages"
-      = yield
-
-    %footer.bg-gray-800.text-white.p-4
-      .container.mx-auto.text-center
-        &copy; 2025 ScreenBetter. All rights reserved.
+    %main.p-4
+      .container.mx-auto
+        .flash-messages.mb-4
+          = render "shared/flash_messages"
+        .content
+          = yield

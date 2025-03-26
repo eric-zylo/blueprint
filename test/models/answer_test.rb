@@ -2,9 +2,9 @@ require "test_helper"
 
 class AnswerTest < ActiveSupport::TestCase
   def setup
-    @assessment = create(:assessment)
-    @question = create(:question)
-    @answer = build(:answer, assessment: @assessment, question: @question)
+    @diagnostic_screener_instance = create(:diagnostic_screener_instance)
+    @question = create(:question, questionable: @diagnostic_screener_instance)
+    @answer = build(:answer, question: @question)
   end
 
   test "answer should be valid" do

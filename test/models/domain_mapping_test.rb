@@ -2,6 +2,7 @@ require "test_helper"
 
 class DomainMappingTest < ActiveSupport::TestCase
   def setup
+    @diagnostic_screener_instance = create(:diagnostic_screener_instance)
     @question = create(:question)
     @domain_mapping = build(:domain_mapping, question: @question)
   end

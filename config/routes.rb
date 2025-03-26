@@ -3,6 +3,16 @@ Rails.application.routes.draw do
 
   mount Sidekiq::Web => '/sidekiq'
 
+  namespace :api do
+    namespace :v1 do
+      resources :diagnostic_screener_instances, only: [:show] do
+        collection do
+          post :score
+        end
+      end
+    end
+  end
+
   devise_for :users, controllers: {
     sessions: 'users/sessions',
     registrations: 'users/registrations',
@@ -11,7 +21,7 @@ Rails.application.routes.draw do
   }
 
   authenticated :user do
-    root to: "dashboard#index", as: :authenticated_root
+    root to: "patients#index", as: :authenticated_root
   end
   
   unauthenticated do
@@ -20,9 +30,11 @@ Rails.application.routes.draw do
     end
   end
 
-  scope '/u' do
-    resources :users, only: [] do
-      resources :patients, only: [:index, :new, :create, :edit, :update, :destroy]
+  resources :users, only: [] do
+    resources :patients do
+      resources :diagnostic_screener_instances, only: [:create]
     end
   end
+
+  get 'diagnostic_screener_instances/:token', to: 'diagnostic_screener_instances#show', as: 'diagnostic_screener'
 end

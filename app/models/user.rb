@@ -10,6 +10,7 @@ class User < ApplicationRecord
   validate :password_complexity
 
   has_many :patients
+  has_many :assessments
 
   private
 

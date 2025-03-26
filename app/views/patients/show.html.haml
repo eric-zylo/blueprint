@@ -1,0 +1,44 @@
+.container.mx-auto.p-4
+  .bg-white.rounded-lg.shadow-md.p-6.mb-8.relative
+    .absolute.top-4.right-4
+      = form_with(url: user_patient_diagnostic_screener_instances_path(current_user, @patient), method: :post, local: true) do |form|
+        .mb-4
+          = form.label :diagnostic_screener_template_id, "Select Diagnostic Screener Template", class: "block text-gray-700 text-sm font-bold mb-2"
+          = form.select :diagnostic_screener_template_id, DiagnosticScreenerTemplate.all.map { |template| [template.name, template.id] }, { prompt: "Select a Template" }, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+
+        .flex.items-center.justify-between
+          = form.submit "Assign Screening", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+    %h1.text-2xl.font-bold.mb-4 Patient Information
+    %p.mb-2
+      %strong First Name:
+      = @patient.first_name
+    %p.mb-2
+      %strong Last Name:
+      = @patient.last_name
+    %p.mb-2
+      %strong Email:
+      = @patient.email
+    %p.mb-2
+      %strong Date Added:
+      = @patient.created_at.strftime('%Y-%m-%d %H:%M:%S')
+    %p.mb-2
+      = button_to "Delete", user_patient_path(current_user, @patient), method: :delete, data: { confirm: "Are you sure?" }, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-xs"
+
+  %h2.text-xl.font-semibold.mb-4 Assessment History
+
+  .overflow-x-auto
+    %table.min-w-full.divide-y.divide-gray-200
+      %thead.bg-gray-50
+        %tr
+          %th.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.uppercase.tracking-wider
+            Assessment Name
+          %th.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.uppercase.tracking-wider
+            Created At
+          %th.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.uppercase.tracking-wider
+            Completed At
+      %tbody.bg-white.divide-y.divide-gray-200
+        - @patient.diagnostic_screener_instances.each do |instance|
+          %tr
+            %td.px-6.py-4.whitespace-nowrap= instance.name
+            %td.px-6.py-4.whitespace-nowrap= instance.created_at.strftime('%Y-%m-%d %H:%M:%S')
+            %td.px-6.py-4.whitespace-nowrap= instance.completed_at&.strftime('%Y-%m-%d %H:%M:%S')
