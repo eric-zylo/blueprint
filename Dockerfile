@@ -37,6 +37,9 @@ RUN bundle install && \
 # Copy application code
 COPY . .
 
+# Intall yarn
+RUN apt-get update && apt-get install -y yarn
+
 # Explicitly change to the application directory
 RUN cd /rails && yarn install
 
