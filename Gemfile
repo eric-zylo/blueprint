@@ -47,6 +47,9 @@ gem 'haml-rails'
 gem 'devise'
 gem 'tailwindcss-rails', '~> 4.2'
 gem 'pundit'
+gem 'rails-ujs'
+gem 'turbo-rails'
+gem 'stimulus-rails'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

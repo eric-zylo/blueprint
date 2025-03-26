@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :assessment do
     patient
-    token { SecureRandom.hex(16) }
+    user
 
     trait :with_answers do
       after(:create) do |assessment|

@@ -10,7 +10,7 @@ questions_with_domains = [
 ]
 
 ActiveRecord::Base.transaction do
-  screener = DiagnosticScreener.create!(
+  screener_template = DiagnosticScreenerTemplate.create!(
     name: "BPDS",
     disorder: "Cross-Cutting",
     display_name: "BDS",
@@ -18,13 +18,10 @@ ActiveRecord::Base.transaction do
   )
 
   questions_with_domains.each_with_index do |entry, index|
-    question = Question.create!(title: entry[:title])
+    question = Question.create!(title: entry[:title], questionable: screener_template)
+
     DomainMapping.create!(question: question, domain: entry[:domain])
 
-    DiagnosticScreenerQuestion.create!(
-      diagnostic_screener: screener,
-      question: question,
-      position: index + 1
-    )
+    screener_template.questions << question
   end
 end

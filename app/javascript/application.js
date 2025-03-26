@@ -1,4 +1,4 @@
-import Rails from "@rails/ujs"
-import "controllers"
+import Rails from "@rails/ujs";
+import "@hotwired/turbo-rails";
 
-Rails.start()
+Rails.start();

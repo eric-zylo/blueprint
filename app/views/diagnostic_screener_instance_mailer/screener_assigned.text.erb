@@ -1,0 +1,11 @@
+Hello <%= @patient.first_name %>,
+
+A new diagnostic screener has been assigned to you by <%= @user.email %>.
+
+Screener Name: <%= @diagnostic_screener_template.name %>
+
+Click the following link to complete the screener:
+<%= @screener_url %>
+
+Thank you,
+The ScreenBetter Team
