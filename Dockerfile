@@ -34,14 +34,18 @@ RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
+# Install Yarn and Javascript dependencies.
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt-get install -y yarn=1.22.22-1
+
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+
 # Copy application code
 COPY . .
-
-# Intall yarn
-RUN apt-get update && apt-get install -y yarn
-
-# Explicitly change to the application directory
-RUN cd /rails && yarn install
 
 # Ensure database configuration is in place (Render provides DATABASE_URL)
 RUN rm -f config/database.yml && \
