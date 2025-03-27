@@ -37,6 +37,9 @@ RUN bundle install && \
 # Copy application code (moved up before yarn install)
 COPY . .
 
+# Set working directory for Yarn (ensure it's the correct location for package.json)
+WORKDIR /rails
+
 # Ensure Yarn dependencies install correctly
 RUN yarn install
 
