@@ -13,7 +13,7 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-# Set environment variables (fix syntax)
+# Set environment variables
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
@@ -34,14 +34,11 @@ RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
-# Copy application code
+# Copy application code (moved up before yarn install)
 COPY . .
 
-# Intall yarn
-RUN apt-get update && apt-get install -y yarn
-
-# Explicitly change to the application directory
-RUN cd /rails && yarn install
+# Ensure Yarn dependencies install correctly
+RUN yarn install --check-files
 
 # Ensure database configuration is in place (Render provides DATABASE_URL)
 RUN rm -f config/database.yml && \
@@ -60,7 +57,7 @@ COPY --from=build /rails /rails
 # Ensure correct file permissions
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
+    chown -R rails:rails db log storage tmp node_modules
 USER 1000:1000
 
 # Expose correct port for Render
