@@ -1,66 +1,39 @@
-# Step 1: Use Ruby as base
-ARG RUBY_VERSION=3.2.2
-FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
+# Step 1: Set up the base image for Ruby and Node.js (with Yarn 1.22.22)
+FROM ruby:3.1.2 AS base
 
-# Set working directory
+# Install Node.js and Yarn
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt-get update -qq \
+    && apt-get install -y nodejs \
+    && npm install -g yarn@1.22.22
+
+# Step 2: Set up the application directory
 WORKDIR /rails
 
-# Install base dependencies and Node.js (which includes npm)
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client \
-    nodejs npm && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# Install Yarn globally (for Yarn 1.x)
-RUN npm install -g yarn@1.22.22
-
-# Step 2: Install build dependencies (for compiling assets and gems)
-FROM base AS build
-
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# Install gems
+# Step 3: Copy the Gemfile and install gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install
+RUN bundle install --without development test
 
-# Step 3: Install Yarn dependencies
-# Copy application code
-COPY . .
+# Step 4: Copy the rest of the application code
+COPY . ./
 
-# Set correct working directory
-WORKDIR /rails
+# Step 5: Install Yarn dependencies
+RUN yarn install --frozen-lockfile
 
-# Debug step to verify the correct directory and files
-RUN ls -la /rails
+# Step 6: Install missing dependencies (webpack, babel-related, etc.)
+RUN yarn add @babel/core webpack-assets-manifest webpack-merge babel-loader compression-webpack-plugin terser-webpack-plugin
 
-# Ensure Yarn dependencies install correctly
-RUN yarn install
-
-# Step 4: Ensure database configuration
-RUN rm -f config/database.yml && \
-    echo "production:\n  adapter: postgresql\n  url: <%= ENV['DATABASE_URL'] %>" > config/database.yml
-
-# Step 5: Precompile assets
+# Step 7: Precompile assets (using a dummy key for SECRET_KEY_BASE)
 RUN SECRET_KEY_BASE=dummy_key bundle exec rails assets:precompile
 
+# Step 8: Clean up temporary files if needed
+RUN rm -rf tmp/cache
+
 # Final Stage for the app image
-FROM base
+FROM base AS final
 
-# Copy over the build
-COPY --from=build /rails /rails
-COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
+# Step 9: Expose the port (adjust as necessary)
+EXPOSE 3000
 
-# Expose correct port for Render
-EXPOSE 10000
-
-# Set up permissions and user
-RUN groupadd --system --gid 1000 rails && \
-    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-
-USER 1000:1000
-
-# Start server in production mode
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "10000", "-e", "production"]
+# Step 10: Set the entrypoint to start the Rails server
+CMD ["rails", "server", "-b", "0.0.0.0"]
