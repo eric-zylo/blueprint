@@ -64,7 +64,7 @@ group :development, :test do
 
   gem 'minitest-focus'
   gem 'pry-rails'
-  gem 'dotenv-rails'
+  # gem 'dotenv-rails'
 end
 
 group :development do
