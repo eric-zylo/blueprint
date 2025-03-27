@@ -38,7 +38,7 @@ RUN bundle install && \
 COPY . .
 
 # Ensure Yarn dependencies install correctly
-RUN yarn install --immutable
+RUN yarn install
 
 # Ensure database configuration is in place (Render provides DATABASE_URL)
 RUN rm -f config/database.yml && \
