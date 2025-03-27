@@ -78,7 +78,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem 'factory_bot_rails'
-  gem 'faker', '~> 2.15'
+  gem 'faker', '~> 3.5'
   gem 'mocha', '~> 2.0'
   gem 'rails-controller-testing'
 end
