@@ -1,39 +1,29 @@
-# Step 1: Set up the base image for Ruby and Node.js (with Yarn 1.22.22)
-FROM ruby:3.1.2 AS base
+# Step 1: Use a Ruby image that includes Ruby 3.2.0 or higher
+FROM ruby:3.2.0
 
-# Install Node.js and Yarn
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
-    && apt-get update -qq \
-    && apt-get install -y nodejs \
-    && npm install -g yarn@1.22.22
+# Step 2: Install dependencies (Node.js, Yarn)
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt-get update -y \
+    && apt-get install -y nodejs postgresql-client
 
-# Step 2: Set up the application directory
+# Step 3: Install Yarn
+RUN npm install -g yarn@1.22.22
+
+# Step 4: Set up working directory
 WORKDIR /rails
 
-# Step 3: Copy the Gemfile and install gems
+# Step 5: Copy Gemfile and install Ruby dependencies
 COPY Gemfile Gemfile.lock ./
 RUN bundle install --without development test
 
-# Step 4: Copy the rest of the application code
-COPY . ./
+# Step 6: Copy the rest of the application code
+COPY . .
 
-# Step 5: Install Yarn dependencies
-RUN yarn install --frozen-lockfile
-
-# Step 6: Install missing dependencies (webpack, babel-related, etc.)
-RUN yarn add @babel/core webpack-assets-manifest webpack-merge babel-loader compression-webpack-plugin terser-webpack-plugin
-
-# Step 7: Precompile assets (using a dummy key for SECRET_KEY_BASE)
+# Step 7: Precompile assets
 RUN SECRET_KEY_BASE=dummy_key bundle exec rails assets:precompile
 
-# Step 8: Clean up temporary files if needed
-RUN rm -rf tmp/cache
-
-# Final Stage for the app image
-FROM base AS final
-
-# Step 9: Expose the port (adjust as necessary)
+# Step 8: Expose the necessary port
 EXPOSE 3000
 
-# Step 10: Set the entrypoint to start the Rails server
-CMD ["rails", "server", "-b", "0.0.0.0"]
+# Step 9: Start the Rails server
+CMD ["bundle", "exec", "rails", "s", "-b", "0.0.0.0"]
