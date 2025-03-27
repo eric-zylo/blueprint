@@ -5,9 +5,10 @@ FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 # Set working directory
 WORKDIR /rails
 
-# Install base dependencies
+# Install base dependencies and Node.js (which includes npm)
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client && \
+    apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client \
+    nodejs npm && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install Yarn globally (for Yarn 1.x)
@@ -17,7 +18,7 @@ RUN npm install -g yarn@1.22.22
 FROM base AS build
 
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config nodejs && \
+    apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install gems
